@@ -1,0 +1,307 @@
+.desktop {
+    background-color: rgba(255, 255, 255, 1.0);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+  .button-link {
+    text-decoration: none; 
+    position: absolute;
+    width: 190px;
+    top: 0xpx;
+    left: 0;
+    color: #023047; 
+    background-color: transparent; 
+    padding: 0px 0px; 
+    border-radius: 5px; 
+    display: inline-block; 
+    transition: background-color 0.3s; 
+  }
+  .button-link:hover {
+    background-color: #0056b3; 
+  }
+  .button-link2{
+    text-decoration: none; 
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    left: 0;
+    color: #023047; 
+    background-color: transparent; 
+    padding: 0px 0px; 
+    border-radius: 5px;
+    display: inline-block; 
+    transition: background-color 0.3s; 
+  }
+  .button-link3 {
+    text-decoration: none; 
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    left: 0;
+    color: #023047; 
+    background-color: transparent;
+    padding: 0px 0px; 
+    border-radius: 5px; 
+    display: inline-block; 
+    transition: background-color 0.3s;
+  }
+  .button-link2:hover,
+  .button-link3:hover{
+    background-color: #0056b3;
+  }
+  .logo {
+    position: absolute;
+    width: 450px;
+    top: 13px;
+  }
+
+  .desktop .div {
+    background-color: rgba(255, 255, 255, 1.0);
+    background: linear-gradient(
+      180deg,
+      rgb(255, 255, 255) 0%,
+      rgba(33, 158, 188, 0.3) 100%
+    );
+    width: 1440px;
+    height: 1024px;
+    position: relative;
+  }
+  
+  .desktop .navbar {
+    position: absolute;
+    width: 294px;
+    height: 93px;
+    top: 12px;
+    left: 87px;
+  }
+  
+  .desktop .overlap-group {
+    position: relative;
+    width: 1440px;
+    height: 154px;
+    top: -12px;
+    left: -87px;
+    background-color: #f9f9f9;
+  }
+  
+  .desktop .overlap {
+    position: absolute;
+    width: 280px;
+    height: 85px;
+    top: 11px;
+    left: 87px;
+  }
+  
+  .desktop .text-wrapper {
+    position: absolute;
+    width: 167px;
+    top: 13px;
+    left: 0;
+    font-family: "Orelega One-Regular", Helvetica;
+    font-weight: 400;
+    color: #023047;
+    font-size: 80px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+  }
+  
+  .desktop .text-wrapper-2 {
+    position: absolute;
+    width: 118px;
+    top: 0;
+    left: 162px;
+    font-family: "Oleo Script-Bold", Helvetica;
+    font-weight: 700;
+    color: #219ebc;
+    font-size: 80px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+  }
+  
+  .desktop .text-wrapper-3 {
+    position: absolute;
+    width: 93px;
+    top: 43px;
+    left: 885px;
+    font-family: "Orelega One-Regular", Helvetica;
+    font-weight: 400;
+    color: #023047;
+    font-size: 40px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+  }
+  
+  .desktop .text-wrapper-4 {
+    position: absolute;
+    width: 151px;
+    top: 43px;
+    left: 657px;
+    font-family: "Orelega One-Regular", Helvetica;
+    font-weight: 400;
+    color: #023047;
+    font-size: 40px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+  }
+  
+  .desktop .text-wrapper-5 {
+    position: absolute;
+    width: 200px;
+    top: 43px;
+    left: 1155px;
+    font-family: "Orelega One-Regular", Helvetica;
+    font-weight: 400;
+    color: #023047;
+    font-size: 40px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+  }
+  
+  .desktop .text-wrapper-6 {
+    position: absolute;
+    width: 190px;
+    top: 232px;
+    left: 109px;
+    font-family: "Poppins-Regular", Helvetica;
+    font-weight: 400;
+    color: #023047;
+    font-size: 70px;
+    letter-spacing: 0;
+    line-height: normal;
+  }
+  
+  .desktop .notee {
+    position: absolute;
+    width: 1229px;
+    height: 80px;
+    top: 353px;
+    left: 98px;
+  }
+  
+  .desktop .overlap-2 {
+    position: relative;
+    width: 1227px;
+    height: 80px;
+    background-color: #d9d9d959;
+    border-radius: 25px;
+  }
+  
+  .desktop .group {
+    position: absolute;
+    width: 51px;
+    height: 25px;
+    top: 27px;
+    left: 1132px;
+  }
+  
+  .desktop .overlap-group-2 {
+    position: relative;
+    height: 25px;
+    top: -1px;
+  }
+  
+  .desktop .line {
+    left: 0;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 0;
+    object-fit: cover;
+  }
+  
+  .desktop .img {
+    left: 25px;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 0;
+    object-fit: cover;
+  }
+  
+  .desktop .ellipse {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 29px;
+    left: 11px;
+    background-color: #000000;
+    border-radius: 10px;
+  }
+  
+  .desktop .text-wrapper-7 {
+    position: absolute;
+    width: 624px;
+    top: 8px;
+    left: 41px;
+    font-family: "Poppins-Regular", Helvetica;
+    font-weight: 400;
+    color: #023047;
+    font-size: 40px;
+    letter-spacing: 0;
+    line-height: normal;
+  }
+  
+  .desktop .overlap-wrapper {
+    position: absolute;
+    width: 1229px;
+    height: 80px;
+    top: 451px;
+    left: 98px;
+  }
+  
+  .desktop .p {
+    position: absolute;
+    width: 633px;
+    top: 8px;
+    left: 41px;
+    font-family: "Poppins-Regular", Helvetica;
+    font-weight: 400;
+    color: #023047;
+    font-size: 40px;
+    letter-spacing: 0;
+    line-height: normal;
+  }
+  
+  .desktop .overlap-group-wrapper {
+    position: absolute;
+    width: 1229px;
+    height: 80px;
+    top: 549px;
+    left: 98px;
+  }
+  
+  .desktop .text-wrapper-8 {
+    position: absolute;
+    width: 649px;
+    top: 8px;
+    left: 41px;
+    font-family: "Poppins-Regular", Helvetica;
+    font-weight: 400;
+    color: #023047;
+    font-size: 40px;
+    letter-spacing: 0;
+    line-height: normal;
+  }
+  
+  .desktop .div-wrapper {
+    position: absolute;
+    width: 1229px;
+    height: 80px;
+    top: 647px;
+    left: 98px;
+  }
+  
+  .desktop .notee-2 {
+    position: absolute;
+    width: 1229px;
+    height: 80px;
+    top: 745px;
+    left: 98px;
+  }

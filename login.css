@@ -1,0 +1,140 @@
+.desktop {
+    background-color: rgba(255, 255, 255, 1.0);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+  .button-link {
+    text-decoration: none; 
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    color: #023047; 
+    background-color: transparent; 
+    padding: 0px 0px; 
+    border-radius: 5px; 
+    display: inline-block; 
+    transition: background-color 0.3s; 
+  }
+  .button-link:hover {
+    background-color: #0056b3; 
+  }
+
+  .logo {
+    position: absolute; 
+    top: 10px; 
+    left: 0px; 
+    max-width: 400px; 
+    height: auto; 
+    z-index: 10; 
+  } 
+  .desktop .overlap-wrapper {
+    background-color: rgba(255, 255, 255, 1.0);
+    background: linear-gradient(
+      180deg,
+      rgb(255, 255, 255) 0%,
+      rgba(33, 158, 188, 0.55) 100%
+    );
+    width: 1440px;
+    height: 1024px;
+  }
+  
+  .desktop .overlap {
+    position: relative;
+    width: 688px;
+    height: 439px;
+    top: 293px;
+    left: 376px;
+    border-radius: 105px;
+    background: linear-gradient(
+      180deg,
+      rgb(255, 255, 255) 0%,
+      rgb(33, 158, 188) 100%
+    );
+  }
+  
+  .desktop .glogin {
+    position: absolute;
+    width: 549px;
+    height: 66px;
+    top: 255px;
+    left: 70px;
+    background-color: #ffffff;
+    border-radius: 20px;
+  }
+  
+  .desktop .group {
+    position: relative;
+    width: 442px;
+    height: 27px;
+    top: 19px;
+    left: 54px;
+  }
+  
+  .desktop .setuju-daftar-dengan {
+    position: absolute;
+    width: 406px;
+    top: 0px;
+    left: 50px;
+    font-family: "Cabin-Regular", Helvetica;
+    font-weight: 400;
+    color: #2e2e2e;
+    font-size: 30px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+  }
+  
+  .desktop .google {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    top: 4px;
+    left: 0;
+    object-fit: cover;
+  }
+  
+  .desktop .text {
+    position: absolute;
+    width: 346px;
+    height: 100px;
+    top: 89px;
+    left: 173px;
+  }
+  
+  .desktop .overlap-group {
+    position: relative;
+    width: 342px;
+    height: 100px;
+  }
+  
+  .desktop .text-wrapper {
+    position: absolute;
+    width: 208px;
+    top: 13px;
+    left: 0;
+    font-family: "Orelega One-Regular", Helvetica;
+    font-weight: 400;
+    color: #023047;
+    font-size: 100px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+  }
+  
+  .desktop .div {
+    position: absolute;
+    width: 144px;
+    top: 0;
+    left: 198px;
+    font-family: "Oleo Script-Bold", Helvetica;
+    font-weight: 700;
+    color: #219ebc;
+    font-size: 100px;
+    letter-spacing: 0;
+    line-height: normal;
+    white-space: nowrap;
+  }
+  
