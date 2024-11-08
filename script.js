@@ -18,7 +18,7 @@ function renderCalendar() {
 
     datesContainer.innerHTML = '';
     const firstDay = new Date(year, month, 1);
-    const totalDays = new Date(year, month + 1, 0).getDate(); 
+    const totalDays = new Date(year, month + 1, 0).getDate();
     const lastDay = new Date(year, month, totalDays);
 
     for (let i = 0; i < firstDay.getDay(); i++) {
@@ -32,7 +32,7 @@ function renderCalendar() {
 
         const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
         if (reminders[dateKey]) {
-            dateDiv.style.backgroundColor = '#FFD700'; 
+            dateDiv.style.backgroundColor = reminders[dateKey].color;
         }
 
         dateDiv.onclick = () => addReminderForDate(dateKey);
@@ -45,15 +45,19 @@ function renderCalendar() {
     }
 }
 
+
 function addReminderForDate(dateKey) {
     reminderTextInput.value = '';
-    reminderDateInput.value = dateKey; 
+    reminderDateInput.value = dateKey;
+    reminderColorInput.value = "#FFD700"; 
 
     setReminderButton.onclick = () => {
         const text = reminderTextInput.value;
+        const color = reminderColorInput.value;
+
         if (text) {
-            reminders[dateKey] = text;
-            addReminderToList(dateKey, text);
+            reminders[dateKey] = { text, color };
+            addReminderToList(dateKey, text, color);
             saveReminders();
             renderCalendar();
         } else {
@@ -62,18 +66,15 @@ function addReminderForDate(dateKey) {
     };
 }
 
-function changeMonth(direction) {
-    currentDate.setMonth(currentDate.getMonth() + direction);
-    renderCalendar();
-}
 
 prevMonthButton.onclick = () => changeMonth(-1);
 nextMonthButton.onclick = () => changeMonth(1);
 
-function addReminderToList(date, text) {
+function addReminderToList(date, text, color) {
     const listItem = document.createElement('div');
     listItem.textContent = `${date}: ${text}`;
-    
+    listItem.style.backgroundColor = color;
+
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
     deleteButton.classList.add('delete');
