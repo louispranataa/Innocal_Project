@@ -312,3 +312,11 @@ button.delete:hover {
 #viewReminders:hover {
     background-color: #1976D2; 
 }
+
+#reminderList div {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}

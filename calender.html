@@ -20,8 +20,7 @@
     <div class="pengingat">
         <a href="pengingat.html" class="button-link2">Pengingat</a>
     </div>
-    <div class="rectangle">
-    </div>
+    <div class="rectangle"></div>
     <div class="current-date">
         <div id="reminderList"></div>
         <h2 id="currentDate"></h2>
@@ -48,6 +47,11 @@
         <div class="reminder-inputs">
             <input type="date" id="reminderDate">
             <input type="text" id="reminderText" placeholder="Reminder text">
+            <select id="reminderColor">
+                <option value="#FFD700">Important</option>  
+                <option value="#4CAF50">Personal</option>   
+                <option value="#2196F3">Work</option>       
+            </select>
             <button id="setReminder">Set Reminder</button>
         </div>
     </div>
