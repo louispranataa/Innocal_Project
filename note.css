@@ -58,16 +58,14 @@
   }
 
   .desktop .div {
-    background-color: rgba(255, 255, 255, 1.0);
-    background: linear-gradient(
-      180deg,
-      rgb(255, 255, 255) 0%,
-      rgba(33, 158, 188, 0.3) 100%
-    );
-    width: 1440px;
+    background-color: #0a0e30;  
+     
+
+    width: 100%;
     height: 1024px;
     position: relative;
-  }
+}
+
   
   .desktop .navbar {
     position: absolute;
@@ -83,7 +81,7 @@
     height: 154px;
     top: -12px;
     left: -87px;
-    background-color: #f9f9f9;
+    background-color: #f5f5f5;
   }
   
   .desktop .overlap {
@@ -171,7 +169,7 @@
     left: 109px;
     font-family: "Poppins-Regular", Helvetica;
     font-weight: 400;
-    color: #023047;
+    color:  #f5f5f5;
     font-size: 70px;
     letter-spacing: 0;
     line-height: normal;
@@ -231,18 +229,18 @@
     height: 20px;
     top: 29px;
     left: 11px;
-    background-color: #000000;
+    background-color: #f5f5f5;
     border-radius: 10px;
   }
   
   .desktop .text-wrapper-7 {
     position: absolute;
     width: 624px;
-    top: 8px;
+    top: 15px;
     left: 41px;
     font-family: "Poppins-Regular", Helvetica;
     font-weight: 400;
-    color: #023047;
+    color: #f5f5f5;
     font-size: 40px;
     letter-spacing: 0;
     line-height: normal;
@@ -284,7 +282,7 @@
     left: 41px;
     font-family: "Poppins-Regular", Helvetica;
     font-weight: 400;
-    color: #023047;
+    color:  #f5f5f5;
     font-size: 40px;
     letter-spacing: 0;
     line-height: normal;
