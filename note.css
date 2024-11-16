@@ -1,305 +1,193 @@
 .desktop {
-    background-color: rgba(255, 255, 255, 1.0);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-  }
-  .button-link {
-    text-decoration: none; 
-    position: absolute;
-    width: 190px;
-    top: 0xpx;
-    left: 0;
-    color: #023047; 
-    background-color: transparent; 
-    padding: 0px 0px; 
-    border-radius: 5px; 
-    display: inline-block; 
-    transition: background-color 0.3s; 
-  }
-  .button-link:hover {
-    background-color: #0056b3; 
-  }
-  .button-link2{
-    text-decoration: none; 
-    position: absolute;
-    width: 100%;
-    top: 0px;
-    left: 0;
-    color: #023047; 
-    background-color: transparent; 
-    padding: 0px 0px; 
-    border-radius: 5px;
-    display: inline-block; 
-    transition: background-color 0.3s; 
-  }
-  .button-link3 {
-    text-decoration: none; 
-    position: absolute;
-    width: 100%;
-    top: 0px;
-    left: 0;
-    color: #023047; 
-    background-color: transparent;
-    padding: 0px 0px; 
-    border-radius: 5px; 
-    display: inline-block; 
-    transition: background-color 0.3s;
-  }
-  .button-link2:hover,
-  .button-link3:hover{
-    background-color: #0056b3;
-  }
-  .logo {
-    position: absolute;
-    width: 450px;
-    top: 13px;
-  }
-
-  .desktop .div {
-    background-color: #0a0e30;  
-     
-
-    width: 100%;
-    height: 1024px;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #ffffff, #33a2ba);
+  background-attachment: fixed;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw;
+  padding: 10px 20px;
+  background-color: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-  
-  .desktop .navbar {
+.logo {
+  width: 150px;
+}
+
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger-menu span {
+  background-color: #023047;
+  height: 3px;
+  width: 25px;
+  margin: 3px 0;
+  transition: 0.3s;
+}
+
+.nav-links {
+  display: flex;
+}
+
+.nav-links a {
+  color: #023047;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 15px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #219ebc;
+}
+
+@media (max-width: 500px) {
+  .hamburger-menu {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
     position: absolute;
-    width: 294px;
-    height: 93px;
-    top: 12px;
-    left: 87px;
+    top: 60px;
+    right: 20px;
+    background-color: white;
+    width: 150px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
-  .desktop .overlap-group {
-    position: relative;
-    width: 1440px;
-    height: 154px;
-    top: -12px;
-    left: -87px;
-    background-color: #f5f5f5;
+
+  .nav-links a {
+    margin: 10px 0;
+    padding: 10px;
+    text-align: center;
   }
-  
-  .desktop .overlap {
-    position: absolute;
-    width: 280px;
-    height: 85px;
-    top: 11px;
-    left: 87px;
+
+  .nav-links.show {
+    display: flex;
   }
-  
-  .desktop .text-wrapper {
-    position: absolute;
-    width: 167px;
-    top: 13px;
-    left: 0;
-    font-family: "Orelega One-Regular", Helvetica;
-    font-weight: 400;
-    color: #023047;
-    font-size: 80px;
-    letter-spacing: 0;
-    line-height: normal;
-    white-space: nowrap;
-  }
-  
-  .desktop .text-wrapper-2 {
-    position: absolute;
-    width: 118px;
-    top: 0;
-    left: 162px;
-    font-family: "Oleo Script-Bold", Helvetica;
-    font-weight: 700;
-    color: #219ebc;
-    font-size: 80px;
-    letter-spacing: 0;
-    line-height: normal;
-    white-space: nowrap;
-  }
-  
-  .desktop .text-wrapper-3 {
-    position: absolute;
-    width: 93px;
-    top: 43px;
-    left: 885px;
-    font-family: "Orelega One-Regular", Helvetica;
-    font-weight: 400;
-    color: #023047;
-    font-size: 40px;
-    letter-spacing: 0;
-    line-height: normal;
-    white-space: nowrap;
-  }
-  
-  .desktop .text-wrapper-4 {
-    position: absolute;
-    width: 151px;
-    top: 43px;
-    left: 657px;
-    font-family: "Orelega One-Regular", Helvetica;
-    font-weight: 400;
-    color: #023047;
-    font-size: 40px;
-    letter-spacing: 0;
-    line-height: normal;
-    white-space: nowrap;
-  }
-  
-  .desktop .text-wrapper-5 {
-    position: absolute;
-    width: 200px;
-    top: 43px;
-    left: 1155px;
-    font-family: "Orelega One-Regular", Helvetica;
-    font-weight: 400;
-    color: #023047;
-    font-size: 40px;
-    letter-spacing: 0;
-    line-height: normal;
-    white-space: nowrap;
-  }
-  
-  .desktop .text-wrapper-6 {
-    position: absolute;
-    width: 190px;
-    top: 232px;
-    left: 109px;
-    font-family: "Poppins-Regular", Helvetica;
-    font-weight: 400;
-    color:  #f5f5f5;
-    font-size: 70px;
-    letter-spacing: 0;
-    line-height: normal;
-  }
-  
-  .desktop .notee {
-    position: absolute;
-    width: 1229px;
-    height: 80px;
-    top: 353px;
-    left: 98px;
-  }
-  
-  .desktop .overlap-2 {
-    position: relative;
-    width: 1227px;
-    height: 80px;
-    background-color: #d9d9d959;
-    border-radius: 25px;
-  }
-  
-  .desktop .group {
-    position: absolute;
-    width: 51px;
-    height: 25px;
-    top: 27px;
-    left: 1132px;
-  }
-  
-  .desktop .overlap-group-2 {
-    position: relative;
-    height: 25px;
-    top: -1px;
-  }
-  
-  .desktop .line {
-    left: 0;
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    top: 0;
-    object-fit: cover;
-  }
-  
-  .desktop .img {
-    left: 25px;
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    top: 0;
-    object-fit: cover;
-  }
-  
-  .desktop .ellipse {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: 29px;
-    left: 11px;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-  }
-  
-  .desktop .text-wrapper-7 {
-    position: absolute;
-    width: 624px;
-    top: 15px;
-    left: 41px;
-    font-family: "Poppins-Regular", Helvetica;
-    font-weight: 400;
-    color: #f5f5f5;
-    font-size: 40px;
-    letter-spacing: 0;
-    line-height: normal;
-  }
-  
-  .desktop .overlap-wrapper {
-    position: absolute;
-    width: 1229px;
-    height: 80px;
-    top: 451px;
-    left: 98px;
-  }
-  
-  .desktop .p {
-    position: absolute;
-    width: 633px;
-    top: 8px;
-    left: 41px;
-    font-family: "Poppins-Regular", Helvetica;
-    font-weight: 400;
-    color: #023047;
-    font-size: 40px;
-    letter-spacing: 0;
-    line-height: normal;
-  }
-  
-  .desktop .overlap-group-wrapper {
-    position: absolute;
-    width: 1229px;
-    height: 80px;
-    top: 549px;
-    left: 98px;
-  }
-  
-  .desktop .text-wrapper-8 {
-    position: absolute;
-    width: 649px;
-    top: 8px;
-    left: 41px;
-    font-family: "Poppins-Regular", Helvetica;
-    font-weight: 400;
-    color:  #f5f5f5;
-    font-size: 40px;
-    letter-spacing: 0;
-    line-height: normal;
-  }
-  
-  .desktop .div-wrapper {
-    position: absolute;
-    width: 1229px;
-    height: 80px;
-    top: 647px;
-    left: 98px;
-  }
-  
-  .desktop .notee-2 {
-    position: absolute;
-    width: 1229px;
-    height: 80px;
-    top: 745px;
-    left: 98px;
-  }
+}
+
+.main-title {
+  font-size: 40px;
+  color: #023047;
+  margin-top: 20px;
+  margin: 80px 0 20px;
+}
+
+.accordion {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.accordion-item {
+  background-color: #023047;
+  margin: 10px 0;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.accordion-content {
+  padding: 20px;
+  display: block;
+  color: #ffffff;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+}
+
+.accordion-title {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 20px;
+  font-size: 24px;
+  text-align: left;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bold;
+  position: relative;
+}
+
+.accordion-title .delete-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ffffff;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.accordion-item.open .accordion-content {
+  max-height: 500px;
+}
+
+.accordion-content {
+  padding: 20px;
+  display: none;
+  color: #ffffff;
+}
+
+.accordion-content label {
+  display: block;
+  margin: 10px 0;
+}
+
+.accordion-content input[type="text"] {
+  width: calc(100% - 10px);
+  padding: 8px;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+}
+.accordion-item.open .accordion-content {
+  display: block;
+}
+
+.save-button, .edit-button, .delete-button {
+  margin: 10px 5px 0 0;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: white;
+  background-color: #3a3e40;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.save-button:hover, .edit-button:hover, .delete-button:hover {
+  background-color: #219ebc;
+}
+
+.add-accordion-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 18px;
+  color: white;
+  background-color: #023047;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-accordion-button:hover {
+  background-color: #219ebc;
+}
