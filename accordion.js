@@ -13,7 +13,7 @@ document.getElementById('add-accordion-button').addEventListener('click', () => 
 
     const newTitle = document.createElement('button');
     newTitle.classList.add('accordion-title');
-    newTitle.innerText = "Isi Acara Anda disini";
+    newTitle.innerText = "Fill in your reminder here";
 
     const deleteIcon = document.createElement('button');
     deleteIcon.classList.add('delete-icon');
@@ -28,9 +28,9 @@ document.getElementById('add-accordion-button').addEventListener('click', () => 
     const newContent = document.createElement('div');
     newContent.classList.add('accordion-content');
     newContent.innerHTML = `
-        <label>Judul Acara: <input type="text" placeholder="Masukkan judul acara..."></label><br>
-        <label>Hari/Tanggal: <input type="text" placeholder="Masukkan hari/tanggal..."></label><br>
-        <label>Waktu: <input type="text" placeholder="Masukkan waktu..."></label><br>
+        <label>Event Title: <input type="text" placeholder="Enter event title..."></label><br>
+        <label>Day/Date: <input type="text" placeholder="Enter day/date..."></label><br>
+        <label>Time: <input type="text" placeholder="Enter time..."></label><br>
         <button class="save-button">Save</button>
         <button class="edit-button" style="display: none;">Edit</button>
         <button class="delete-button">Delete</button>
@@ -44,7 +44,6 @@ document.getElementById('add-accordion-button').addEventListener('click', () => 
     const editButton = newContent.querySelector('.edit-button');
     const deleteButton = newContent.querySelector('.delete-button');
 
-    // Toggle buka-tutup dengan animasi smooth
     newTitle.addEventListener('click', () => {
         const isOpen = newAccordionItem.classList.contains('open');
 
