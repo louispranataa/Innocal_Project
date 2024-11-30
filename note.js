@@ -13,7 +13,7 @@ document.getElementById('add-accordion-button').addEventListener('click', () => 
 
     const newTitle = document.createElement('button');
     newTitle.classList.add('accordion-title');
-    newTitle.innerText = "Isi Note Anda disini";
+    newTitle.innerText = "Fill in your notes here";
 
     const deleteIcon = document.createElement('button');
     deleteIcon.classList.add('delete-icon');
@@ -28,8 +28,8 @@ document.getElementById('add-accordion-button').addEventListener('click', () => 
     const newContent = document.createElement('div');
     newContent.classList.add('accordion-content');
     newContent.innerHTML = `
-        <label>Judul Acara: <input type="text" placeholder="Masukkan judul acara..."></label><br>
-        <label>Note untuk Acara: <input type="text" placeholder="Masukkan Note anda untuk acara ini..."></label><br>
+        <label>Event Title: <input type="text" placeholder="Enter event title..."></label><br>
+        <label>Notes for Events: <input type="text" placeholder="Enter your Note for this event..."></label><br>
         <button class="save-button">Save</button>
         <button class="edit-button" style="display: none;">Edit</button>
         <button class="delete-button">Delete</button>
