@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up Innocal</title>
+  <link rel="stylesheet" href="signup.css">
+  <!-- Load Google API Script -->
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+  <div class="login-container">
+    <h1 class="login-title">Create Account</h1>
+    <form id="signin-form" class="login-form">
+      <div class="input-group">
+        <label for="new-username">Username</label>
+        <input type="text" id="new-username" name="new-username" placeholder="Choose your username" required>
+      </div>
+      <div class="input-group">
+        <label for="new-password">Password</label>
+        <input type="password" id="new-password" name="new-password" placeholder="Create your password" required>
+      </div>
+      <div class="input-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+      </div>
+      <button type="submit" class="login-button">Sign Up</button>
+      <p class="error-message" id="error-message"></p>
+    </form>
+    <hr>
+    <div class="google-login">
+      <div class="g-signin2" data-onsuccess="onSignIn"></div> <!-- Google Sign-In Button -->
+    </div>
+    <p class="have-account">
+      Already have an account? <a href="login.html" class="login-link">Login</a>
+    </p>
+  </div>
+  <script src="signup.js"></script>
+</body>
+</html>
