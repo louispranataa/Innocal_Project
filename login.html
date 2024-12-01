@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Innocal</title>
   <link rel="stylesheet" href="login.css">
-  
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
   <div class="login-container">
@@ -24,9 +22,9 @@
       <p class="error-message" id="error-message"></p>
     </form>
     <hr>
-    <div class="google-login">
-      <div class="g-signin2" data-onsuccess="onSignIn"></div> 
-    </div>
+    <p class="have-account">
+      <a href="/login" class="login-link google-login-button">Login with Google</a>
+    </p>
     <p class="have-account">
       You don't have an account? <a href="signup.html" class="login-link">Sign Up</a>
     </p>
