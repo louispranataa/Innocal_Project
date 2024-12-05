@@ -1,0 +1,332 @@
+
+body {
+    width: 1440px;
+    height: 1024px;
+    margin: 0; 
+    overflow: hidden; 
+    background: rgba(10, 14, 23, 1);
+    color: white; 
+}
+.navbar {
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw;
+    padding: 10px 20px;
+    background-color: white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logo {
+    width: 150px;
+  }
+  
+  .hamburger-menu {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  
+  .hamburger-menu span {
+    background-color: #023047;
+    height: 3px;
+    width: 25px;
+    margin: 3px 0;
+    transition: 0.3s;
+  }
+  
+  .nav-links {
+    display: flex;
+  }
+  
+  .nav-links a {
+    color: #023047;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 15px;
+    transition: color 0.3s;
+  }
+  
+  .nav-links a:hover {
+    color: #219ebc;
+  }
+  
+  @media (max-width: 500px) {
+    .hamburger-menu {
+      display: flex;
+    }
+  
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background-color: white;
+      width: 150px;
+      border-radius: 5px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  
+    .nav-links a {
+      margin: 10px 0;
+      padding: 10px;
+      text-align: center;
+    }
+  
+    .nav-links.show {
+      display: flex;
+    }
+  }
+
+
+  .calendar {
+    background: linear-gradient(
+        180deg,
+        rgb(2, 48, 71) 0%,
+        rgba(33, 158, 188, 0.22) 100%
+    );
+    border-radius: 20px;
+    height: 480px;  /* Slightly reduced height */
+    width: 550px;   /* Slightly reduced width */
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.rectangle1{
+    background-color:#023048;
+    border-radius:10px;
+    height:50px;
+    left:30px;
+    position:fixed;
+    bottom:20px;
+    width:700px;
+}
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Ensures days fit inside 7 equal columns */
+    gap: 0;
+    color: #ffffff;
+    font-family: "Poppins-Regular", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.day {
+    color: #ffffff;
+    width: 57px;
+    font-size: 20px;
+    font-weight: 400;
+    font-weight: bold;
+    font-family: "Poppins-Regular", Helvetica;
+}
+
+.dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Ensures dates align with days */
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.date {
+    background-color: #076594;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-family: "Poppins-Regular", Helvetica, Arial, sans-serif;
+    border-radius: 10px;
+    height: 70px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.date:hover {
+    background-color: #023047;
+    transform: scale(1.05);
+}
+.today {
+    border: 3px solid #ffffff;
+    font-weight: bold;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
+}
+.selected {
+    background-color: #FFD700;
+    color: #023047;
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 0px 0px 8px rgba(255, 215, 0, 0.6);
+}
+
+.current-date {
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    height: 700px; 
+    width: 70%; 
+    padding: 10px; 
+}
+
+#currentDate{
+    position: absolute; 
+    top: 18%; 
+    right: 10px; 
+    transform: translate(0, -0); 
+    font-size: 50px; 
+    color: #ffffff; 
+    
+}
+
+#currentDay{
+    position: absolute; 
+    top: 20%; 
+    left: 43%; 
+    transform: translate(-50%, -50%); 
+    font-size: 50px; 
+    color: #ffffff; 
+    
+}
+
+.reminder-inputs {
+    display: flex; 
+    gap: 10px; 
+    margin-top: 10px; 
+}
+
+#reminderDate {
+    flex: 1; 
+    background-color: transparent;
+    color: white; 
+    border: 1px solid white; 
+    padding: 5px; 
+    border-radius: 5px; 
+}
+
+#reminderText {
+    flex: 2; 
+    background-color: transparent; 
+    color: white;
+    border: 1px solid white; 
+    padding: 5px; 
+    border-radius: 5px; 
+}
+
+#reminderList {
+    margin-top: 20px;
+    max-width: 300px;
+}
+#reminderDate:focus,
+#reminderText:focus {
+    outline: none; 
+    border: 1px solid #FFD700; 
+}
+
+button {
+    margin-left: 10px; 
+    background: transparent; 
+    border: none; 
+    color: white; 
+    cursor: pointer; 
+}
+
+button.delete {
+    background-color: #f44336; 
+}
+
+button.delete:hover {
+    background-color: #d32f2f; 
+    opacity: 0.7; 
+}
+.remindersList{
+    position: absolute; 
+    top: 40%; 
+    right: 50px; 
+    transform: translate(0, -0); 
+    font-size: 50px; 
+    color: #ffffff; 
+
+}
+
+.reminders-page {
+    text-align: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#reminderList {
+    position: absolute; 
+    top: 50%; 
+    right: 25%; 
+    font-size: 36px;
+    margin-top: 20px;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#viewReminders {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2196F3;
+    color: white;
+    cursor: pointer;
+}
+
+#viewReminders:hover {
+    background-color: #1976D2; 
+}
+
+#reminderList div {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+/* Open Button to trigger reminder form */
+.open-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #FFD700;
+    color: white;
+    border: none;
+    font-size: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    z-index: 2; /* Ensure the button stays on top */
+}
+
+.open-button:hover {
+    background-color: #FFD700;
+}
+
