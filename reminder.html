@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Reminders</title>
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/reminder.css">
+</head>
+<body>
+    <div class="desktop">
+
+        <!-- Navbar -->
+        <div class="navbar">
+            <a href="/">
+                <img src="/images/logo2.png" alt="Logo" class="logo">
+            </a>
+            <div class="hamburger-menu" id="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav class="nav-links" id="nav-links">
+                <a href="/login" class="button-link">Home</a>
+                <a href="/note" class="button-link">Note</a>
+                <a href="/calendar" class="button-link">Calendar</a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <h1 class="main-title">Reminders</h1>
+        
+        <!-- Accordion Section -->
+        <div id="accordion-container" class="accordion">
+        </div>
+        
+        <button id="add-accordion-button" class="add-accordion-button">Add a Reminder</button>
+    </div>
+
+    <script src="/js/reminder.js"></script>
+</body>
+</html>
