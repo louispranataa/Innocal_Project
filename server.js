@@ -16,25 +16,25 @@ const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
 });
 
-// Initialize OAuth2Client with environment variables
+// Inisialisasi OAuth2Client dengan environment variables
 const oauth2Client = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET
 );
 
-// Middleware for session handling (must be before any routes)
+// Middleware untuk session harus ada sebelum route lainnya
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set false for development without HTTPS
+    cookie: { secure: false } // Harus false untuk development tanpa HTTPS
 }));
 
-// Middleware for enabling CORS and handling JSON body parsing
+// Middleware untuk enabling CORS dan menangani request body JSON
 app.use(cors());
 app.use(bodyParser.json());
 
-// Serve static files (like CSS, JS)
+// Rute untuk menyajikan halaman static (seperti file CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve landing page (root route)
@@ -47,7 +47,6 @@ app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'signup.html'));
 });
 
-// Signup route - Handle user signups
 app.post('/signups', async (req, res) => {
     const { username, password } = req.body;
 
@@ -71,15 +70,18 @@ app.post('/signups', async (req, res) => {
     }
 });
 
-// Calendar route - Only accessible if user is logged in
+  
+  
+
+// Calendar route
 app.get('/calendar', (req, res) => {
     if (!req.session.user) {
-        return res.redirect('/'); // Redirect to login if user is not logged in
+        return res.redirect('/'); // Jika user belum login, arahkan ke halaman login
     }
-    res.sendFile(path.join(__dirname, 'cal.html')); // Serve calendar page
+    res.sendFile(path.join(__dirname, 'cal.html')); // Kirim file cal.html ke user
 });
 
-// Logout route - Destroy session and log out the user
+// Logout route
 app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -90,14 +92,11 @@ app.get('/logout', (req, res) => {
     });
 });
 
-// Note route
 app.get('/note', (req, res) => {
     res.sendFile(path.join(__dirname, 'note.html'));
 });
-
-// Reminder route
-app.get('/reminder', (req, res) => {
-    res.sendFile(path.join(__dirname, 'reminder.html'));
+app.get('/pengingat', (req, res) => {
+    res.sendFile(path.join(__dirname, 'pengingat.html'));
 });
 
 // Serve login page
@@ -105,7 +104,7 @@ app.get('/logins', (req, res) => {
     res.sendFile(path.join(__dirname, 'login.html'));
 });
 
-// Google OAuth login route
+// Route untuk memulai login menggunakan Google OAuth
 app.get('/login', (req, res) => {
     const authUrl = oauth2Client.generateAuthUrl({
         access_type: 'offline',
@@ -119,14 +118,15 @@ app.get('/login', (req, res) => {
     res.redirect(authUrl);
 });
 
-// Callback route for Google OAuth login
+
+// Callback route setelah login Google
 app.get('/auth/google/callback', async (req, res) => {
     const { code } = req.query;
 
     try {
         const { tokens } = await oauth2Client.getToken({
             code,
-            redirect_uri: 'http://localhost:3000/auth/google/callback',
+            redirect_uri: 'http://localhost:3000/auth/google/callback', // pastikan ini sesuai dengan yang ada di Google OAuth
         });
         oauth2Client.setCredentials(tokens);
 
@@ -146,16 +146,16 @@ app.get('/auth/google/callback', async (req, res) => {
             user = user.rows[0];
         }
 
-        // Save user data in session
+        // Setelah login sukses, simpan data user dalam session
         req.session.user = {
             id: user.id,
             email: user.email,
             google_id: user.google_id,
         };
 
-        console.log('Session after login:', req.session);
+        console.log('Session after login:', req.session); // Debugging
 
-        // Redirect to calendar page after login
+        // Redirect ke /calendar setelah login
         res.redirect('/calendar');
     } catch (error) {
         console.error('Authentication Error:', error);
@@ -163,7 +163,7 @@ app.get('/auth/google/callback', async (req, res) => {
     }
 });
 
-// Authentication middleware
+// Middleware untuk autentikasi
 function authenticate(req, res, next) {
     if (!req.session.user) {
         return res.status(401).send('You must be logged in');
@@ -171,7 +171,7 @@ function authenticate(req, res, next) {
     next();
 }
 
-// API to fetch reminders for a specific date
+// API untuk mengambil reminder berdasarkan tanggal
 app.get('/reminders', authenticate, async (req, res) => {
     const user_id = req.session.user.id;
     const { date } = req.query;
@@ -188,7 +188,7 @@ app.get('/reminders', authenticate, async (req, res) => {
     }
 });
 
-// API to delete a reminder
+// API untuk menghapus reminder
 app.delete('/reminders/:id', authenticate, async (req, res) => {
     const user_id = req.session.user.id;
     const { id } = req.params;
@@ -202,108 +202,42 @@ app.delete('/reminders/:id', authenticate, async (req, res) => {
     }
 });
 
-// API to update a reminder
-app.put('/reminders/:id', authenticate, async (req, res) => {
-    const reminderId = req.params.id;
-    const { title, description, reminder_date } = req.body;
-
-    try {
-        const result = await pool.query(
-            'UPDATE reminders SET title = $1, description = $2, reminder_date = $3 WHERE id = $4 RETURNING *',
-            [title, description, reminder_date, reminderId]
-        );
-
-        if (result.rows.length === 0) {
-            return res.status(404).send('Reminder not found');
-        }
-
-        res.status(200).send('Reminder updated successfully');
-    } catch (err) {
-        console.error('Error updating reminder:', err);
-        res.status(500).send('Error updating reminder');
-    }
-});
-
-app.post('/add-event', async (req, res) => {
-    const { title, description, time, reminder_date, created_at } = req.body;
-  
-    // Get the user_id from session
-    const user_id = req.session.user_id;
-  
-    if (!user_id) {
-      return res.status(401).send('User not authenticated');  // If no user is logged in
-    }
-  
-    if (!title || !description || !time || !reminder_date || !created_at) {
-      return res.status(400).send('All fields are required');
-    }
-  
-    try {
-      const query = 
-        'INSERT INTO reminders (title, description, time, reminder_date, created_at, user_id) VALUES ($1, $2, $3, $4, $5, $6)';
-      
-      await pool.query(query, [title, description, time, reminder_date, created_at, user_id]);
-      res.status(200).send('Event added successfully');
-    } catch (error) {
-      console.error('Database error:', error.message);
-      res.status(500).send('Failed to add event');
-    }
-  });
-
-  app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    // Validate user credentials (assuming you already do this part)
-    
-    const query = 'SELECT * FROM users WHERE username = $1';
-    const result = await pool.query(query, [username]);
-  
-    if (result.rows.length > 0) {
-      // Assuming password check is successful
-      const user = result.rows[0];
-      req.session.user_id = user.user_id;  // Store user_id in session
-      res.status(200).send('Login successful');
-    } else {
-      res.status(400).send('Invalid credentials');
-    }
-  });
-
-  // Middleware to verify the Google ID token
-async function verifyGoogleToken(req, res, next) {
-    const token = req.headers['authorization']?.split(' ')[1]; // Extract token from 'Authorization: Bearer <token>'
-  
-    if (!token) {
-      return res.status(401).send('No token provided');
-    }
-  
-    try {
-      // Verify the token using Google OAuth2 client
-      const ticket = await client.verifyIdToken({
-        idToken: token,
-        audience: process.env.GOOGLE_CLIENT_ID, // Verify the token with your client ID
-      });
-  
-      // Get the payload of the ID token (contains user information)
-      const payload = ticket.getPayload();
-      req.user = { user_id: payload.sub };  // The 'sub' field in the payload is the unique user ID
-  
-      next();  // Proceed to the next middleware (route handler)
-    } catch (error) {
-      console.error('Token verification failed:', error);
-      res.status(401).send('Invalid or expired token');
-    }
-  }
-  
-
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
 
-// Route to send user_id stored in session
-app.get('/get-user-id', (req, res) => {
-    if (!req.session.user || !req.session.user.id) {
-      return res.status(401).send('User not authenticated');
-    }
-    res.status(200).send({ user_id: req.session.user.id }); // Send user_id from session
-  });
+//login lokal
+app.post('/login-local', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        // Cari user di database
+        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+
+        if (result.rows.length === 0) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+
+        const user = result.rows[0];
+
+        // Bandingin password yang diinput user sama yang di database
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordMatch) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+
+        // Kalau valid, simpen session user
+        req.session.user = {
+            id: user.id,
+            username: user.username,
+        };
+
+        res.status(200).json({ message: 'Login successful!', token: 'dummy-token' }); // Bisa ganti token-nya
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error'});
+}
+});
