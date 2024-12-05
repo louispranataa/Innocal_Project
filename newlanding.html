@@ -7,9 +7,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
-    <link rel="stylesheet" href="globals.css" />
-    <link rel="stylesheet" href="styleguide.css" />
-    <link rel="stylesheet" href="newlanding.css" />
+    <link rel="stylesheet" href="/css/globals.css" />
+    <link rel="stylesheet" href="/css/styleguide.css" />
+    <link rel="stylesheet" href="/css/newlanding.css" />
   </head>
   <body>
     <div class="desktop">
@@ -17,7 +17,7 @@
         <div class="group">
           <div class="overlap-group-wrapper">
             <div class="overlap-group intro-animate scroll-animate">
-              <a href="login.html" class="link-text">
+              <a href="/logins" class="link-text">
                 <div class="text-wrapper ">Try for Free</div>
               </a>
             </div>
@@ -35,7 +35,7 @@
                 </p>
               </div>
             </div>
-            <img class="inno intro-animate scroll-animate" src="img/inno-1.png" />
+            <img class="inno intro-animate scroll-animate" src="/images/inno-1.png" />
           </div>
         </div>
 
@@ -56,7 +56,7 @@
                         Won&#39;t forget again! Get notifications for every important event and task.
                       </p>
                     </div>
-                    <img class="image" src="img/image-1.png" />
+                    <img class="image" src="/images/image-1.png" />
                   </div>
                   <div class="frame-4">
                     <div class="frame-5">
@@ -66,14 +66,14 @@
                       </div>
                     </div>
                     <div class="frame-wrapper"><div class="frame-7"></div></div>
-                    <img class="image" src="img/image-2.png" />
+                    <img class="image" src="/images/image-2.png" />
                   </div>
                   <div class="frame-8">
                     <div class="frame-9">
                       <div class="text-wrapper-6">Easy Scheduling</div>
                       <p class="add-events-quickly">Add events quickly and organize<br />schedules more efficiently.</p>
                     </div>
-                    <img class="image" src="img/image-4.png" />
+                    <img class="image" src="/images/image-4.png" />
                   </div>
                   <div class="frame-10">
                     <div class="frame-11">
@@ -84,7 +84,7 @@
                         </p>
                       </div>
                     </div>
-                    <img class="image" src="img/image-3.png" />
+                    <img class="image" src="/images/image-3.png" />
                   </div>
                 </div>
               </div>
@@ -100,19 +100,23 @@
         </div>
         <div class="navbar-wrapper">
           <div class="navbar ">
-            <img class="logo3" src="images/logo2.png" />
+            <img class="logo3" src="/images/logo2.png" />
             <div class="overlap-6">
-              <a href="login.html" class="link-text">
-                <div class="text-wrapper-13 button-style">Sign in</div>
+              <!-- Text wrapper 13 turned into a button -->
+              <a href="/logins" class="link-text">
+                <div class="text-wrapper-13">Sign in</div>
               </a>
             </div>
-            <a href="note.html" class="link-text">
+            <!-- Text wrapper 14 turned into a button -->
+            <a href="/note" class="link-text">
               <button class="text-wrapper-14 button-style">Note</button>
             </a>
-            <a href="cal.html" class="link-text">
+            <!-- Text wrapper 15 turned into a button -->
+            <a href="/calendar" class="link-text">
               <button class="text-wrapper-15 button-style">Calendar</button>
             </a>
-            <a href="pengingat.html" class="link-text">
+            <!-- Text wrapper 16 turned into a button -->
+            <a href="/reminder" class="link-text">
               <button class="text-wrapper-16 button-style">Reminder</button>
             </a>
           </div>
@@ -122,13 +126,13 @@
             <div class="group-wrapper">
               <div class="group-3">
                 <div class="MENU">
-                  <a href="note.html" class="link-text">
+                  <a href="/note" class="link-text">
                     <button class="text-wrapper-18 button-style">Note</button>
                   </a>
-                  <a href="pengingat.html" class="link-text">
+                  <a href="/pengingat" class="link-text">
                     <button class="text-wrapper-19 button-style">Reminder</button>
                   </a>
-                  <a href="calender.html" class="link-text">
+                  <a href="/calendar" class="link-text">
                     <button class="text-wrapper-20 button-style">Calender</button>
                   </a>
                   <div class="text-wrapper-21">Menu</div>
@@ -153,7 +157,7 @@
                 </div>
               </div>
             </div>
-            <img class="logo4 intro-animate scroll-animate" src="images/logo2.png" />
+            <img class="logo4 intro-animate scroll-animate" src="/images/logo2.png" />
           </div>
           <div class="group-4">
             <div class="text-wrapper-31 intro-animate scroll-animate">How it Works</div>
@@ -176,7 +180,7 @@
               <p class="get-timely-reminders intro-animate scroll-animate">
                 &#34;Get timely reminders so you never miss an important event or deadline.&#34;
               </p>
-              <img class="element intro-animate scroll-animate" src="img/1-11.png" />
+              <img class="element intro-animate scroll-animate" src="/images/1-11.png" />
             </div>
           </div>
         </div>
@@ -184,10 +188,13 @@
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // Animasi untuk landing page
         const introElements = document.querySelectorAll(".intro-animate");
         introElements.forEach(el => {
           el.classList.add("animate-visible");
         });
+    
+        // Animasi scroll untuk elemen
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach(entry => {
