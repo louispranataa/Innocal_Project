@@ -19,33 +19,33 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" href="cal.css" />
+    <link rel="stylesheet" href="/css/cal.css" />
     <title>Calendar</title>
   </head>
   <body>
     <!-- Navbar -->
     <div class="navbar">
-      <a href="newlanding.html">
-          <img src="images/logo2.png" alt="Logo" class="logo">
+      <a href="/">
+        <img src="/images/logo2.png" alt="Logo" class="logo" />
       </a>
       <div class="hamburger-menu" id="hamburger-menu">
-          <span></span>
-          <span></span>
-          <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
       <nav class="nav-links" id="nav-links">
-          <a href="newlanding.html" class="button-link">Home</a>
-          <a href="note.html" class="button-link">Note</a>
-          <a href="pengingat.html" class="button-link">Reminder</a>
+        <a href="/" class="button-link">Home</a>
+        <a href="/note" class="button-link">Note</a>
+        <a href="/reminder" class="button-link">Reminder</a>
       </nav>
-  </div>
+    </div>
 
     <div class="container">
       <div class="left">
         <div class="calendar">
           <div class="month">
             <i class="fas fa-angle-left prev"></i>
-            <div class="date">december 2015</div>
+            <div class="date">December 2015</div>
             <i class="fas fa-angle-right next"></i>
           </div>
           <div class="weekdays">
@@ -69,8 +69,8 @@
       </div>
       <div class="right">
         <div class="today-date">
-          <div class="event-day">sun</div>
-          <div class="event-date">1st december 2024</div>
+          <div class="event-day">Sun</div>
+          <div class="event-date">1st December 2024</div>
         </div>
         <div class="events"></div>
         <div class="add-event-wrapper">
@@ -80,21 +80,17 @@
           </div>
           <div class="add-event-body">
             <div class="add-event-input">
-              <input type="text" placeholder="Event Name" class="event-name" />
+              <input type="text" placeholder="Title" class="event-title" />
             </div>
             <div class="add-event-input">
               <input
                 type="text"
-                placeholder="Event Time From"
-                class="event-time-from"
+                placeholder="Description"
+                class="event-description"
               />
             </div>
             <div class="add-event-input">
-              <input
-                type="text"
-                placeholder="Event Time To"
-                class="event-time-to"
-              />
+              <input type="text" placeholder="Event Time (HH:MM)" class="event-time" />
             </div>
           </div>
           <div class="add-event-footer">
@@ -107,6 +103,6 @@
       </button>
     </div>
 
-    <script src="cal.js"></script>
+    <script src="/js/cal.js"></script>
   </body>
 </html>
