@@ -177,14 +177,16 @@ app.get('/reminders', authenticate, async (req, res) => {
     const { date } = req.query;
 
     try {
-        const result = await pool.query(
-            'SELECT * FROM reminders WHERE reminder_date::date = $1 AND user_id = $2',
-            [date, user_id]
-        );
+        const query = date
+            ? 'SELECT * FROM reminders WHERE reminder_date::date = $1 AND user_id = $2'
+            : 'SELECT * FROM reminders WHERE user_id = $1';
+        const params = date ? [date, user_id] : [user_id];
+
+        const result = await pool.query(query, params);
         res.json(result.rows);
     } catch (err) {
         console.error('Error fetching reminders:', err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: 'Failed to fetch reminders' });
     }
 });
 
@@ -206,6 +208,48 @@ app.delete('/reminders/:id', authenticate, async (req, res) => {
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
+});
+
+// POST /reminders to add a new reminder
+app.post('/reminders', authenticate, async (req, res) => {
+    const { title, description, time, day, month, year } = req.body;
+    const user_id = req.session.user.id;
+
+    try {
+        // Combine day, month, and year into a single date
+        const reminder_date = `${year}-${month}-${day}`;
+
+        // Insert the reminder into the reminders table
+        const result = await pool.query(
+            `INSERT INTO reminders (user_id, title, description, time, reminder_date) 
+            VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+            [user_id, title, description, time, reminder_date]
+        );
+
+        res.status(201).json(result.rows[0]); // Return the newly added reminder
+    } catch (err) {
+        console.error('Error adding reminder:', err);
+        res.status(500).json({ error: 'Failed to add reminder' });
+    }
+});
+
+// GET /reminders to retrieve reminders for a specific date
+app.get('/reminders', authenticate, async (req, res) => {
+    const user_id = req.session.user.id;
+    const { day, month, year } = req.query;
+
+    try {
+        const reminder_date = `${year}-${month}-${day}`;
+        const result = await pool.query(
+            `SELECT * FROM reminders WHERE user_id = $1 AND reminder_date = $2`,
+            [user_id, reminder_date]
+        );
+
+        res.json(result.rows); // Return the reminders for that date
+    } catch (err) {
+        console.error('Error fetching reminders:', err);
+        res.status(500).json({ error: 'Failed to fetch reminders' });
+    }
 });
 
 //login lokal
@@ -240,4 +284,55 @@ app.post('/login-local', async (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'Internal server error'});
 }
+});
+
+app.delete('/reminders', authenticate, async (req, res) => {
+    const { title, day, month, year } = req.body;
+    const user_id = req.session.user.id;
+
+    try {
+        const reminder_date = `${year}-${month}-${day}`;
+        const result = await pool.query(
+            `DELETE FROM reminders WHERE user_id = $1 AND title = $2 AND reminder_date = $3 RETURNING *`,
+            [user_id, title, reminder_date]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+
+        res.status(200).json({ message: 'Event deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting event:', err);
+        res.status(500).json({ error: 'Failed to delete event' });
+    }
+});
+
+app.delete('/reminders', authenticate, async (req, res) => {
+    const { title, description, time, reminder_date } = req.body;
+    const user_id = req.session.user.id;
+
+    console.log('DELETE request received with data:', { title, description, time, reminder_date, user_id });
+
+    try {
+        const reminder_date = `${year}-${month}-${day}`;
+        console.log('Attempting to delete reminder with date:', reminder_date);
+
+        // Execute the DELETE query
+        const result = await pool.query(
+            'DELETE FROM reminders WHERE user_id = $1 AND title = $2 AND reminder_date = $3 AND description = $4 AND time = $5 RETURNING *',
+            [user_id, title, reminder_date, description, time]
+        );
+
+        console.log('Query result:', result);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+
+        res.status(200).json({ message: 'Event deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting reminder:', err);
+        res.status(500).json({ error: 'Failed to delete event' });
+    }
 });
