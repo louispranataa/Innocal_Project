@@ -1,81 +1,81 @@
-const hamburgerMenu = document.getElementById('hamburger-menu');
-const navLinks = document.getElementById('nav-links');
-
-hamburgerMenu.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-    hamburgerMenu.classList.toggle('active');
-});
-
-document.getElementById('add-accordion-button').addEventListener('click', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const accordionContainer = document.getElementById('accordion-container');
-    const emptyMessage = accordionContainer.querySelector('.empty-message');
-    if (emptyMessage) emptyMessage.remove();
 
-    const newAccordionItem = document.createElement('div');
-    newAccordionItem.classList.add('accordion-item');
+    // Fetch reminders from the server
+    fetch('/reminders')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error fetching reminders: ${response.statusText} (${response.status})`);
+            }
+            return response.json();
+        })
+        .then(reminders => {
+            // If no reminders, show empty message
+            if (reminders.length === 0) {
+                accordionContainer.innerHTML = '<p class="empty-message">No reminders yet.</p>';
+                return;
+            }
 
-    const newTitle = document.createElement('button');
-    newTitle.classList.add('accordion-title');
-    newTitle.innerText = "Fill in your reminder here";
+            // Populate reminders in the accordion
+            reminders.forEach(reminder => {
+                const accordionItem = document.createElement('div');
+                accordionItem.classList.add('accordion-item');
 
-    const deleteIcon = document.createElement('button');
-    deleteIcon.classList.add('delete-icon');
-    deleteIcon.innerHTML = '✖';
-    deleteIcon.addEventListener('click', (event) => {
-        event.stopPropagation();
-        accordionContainer.removeChild(newAccordionItem);
-        if (!accordionContainer.children.length) {
-            accordionContainer.innerHTML = '<p class="empty-message">No reminders yet.</p>';
-        }
-    });
+                const title = document.createElement('button');
+                title.classList.add('accordion-title');
+                title.innerText = `${reminder.title} - ${reminder.reminder_date} - ${reminder.time}`;
 
-    newTitle.appendChild(deleteIcon);
+                const content = document.createElement('div');
+                content.classList.add('accordion-content');
+                content.innerHTML = `
+                    <p><strong>Title:</strong> ${reminder.title}</p>
+                    <p><strong>Date:</strong> ${reminder.reminder_date}</p>
+                    <p><strong>Time:</strong> ${reminder.time}</p>
+                    <button class="delete-button" data-id="${reminder.id}">Delete</button>
+                `;
 
-    const newContent = document.createElement('div');
-    newContent.classList.add('accordion-content');
-    newContent.innerHTML = `
-        <label>Event Title: <input type="text" placeholder="Enter event title..."></label><br>
-        <label>Day/Date: <input type="text" placeholder="Enter day/date..."></label><br>
-        <label>Time: <input type="text" placeholder="Enter time..."></label><br>
-        <button class="save-button">Save</button>
-        <button class="edit-button" style="display: none;">Edit</button>
-        <button class="delete-button">Delete</button>
-    `;
+                accordionItem.appendChild(title);
+                accordionItem.appendChild(content);
+                accordionContainer.appendChild(accordionItem);
 
-    newAccordionItem.appendChild(newTitle);
-    newAccordionItem.appendChild(newContent);
-    accordionContainer.appendChild(newAccordionItem);
+                // Expand/Collapse logic
+                title.addEventListener('click', () => {
+                    const isOpen = accordionItem.classList.contains('open');
+                    accordionItem.classList.toggle('open');
+                    content.style.maxHeight = isOpen ? null : content.scrollHeight + "px";
+                });
 
-    const saveButton = newContent.querySelector('.save-button');
-    const editButton = newContent.querySelector('.edit-button');
-    const deleteButton = newContent.querySelector('.delete-button');
+                // Add delete functionality
+                const deleteButton = content.querySelector('.delete-button');
+                deleteButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const reminderId = deleteButton.getAttribute('data-id');
+                    deleteReminder(reminderId, accordionItem);
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            accordionContainer.innerHTML = `<p class="empty-message">${error.message}</p>`;
+        });
 
-    newTitle.addEventListener('click', () => {
-        const isOpen = newAccordionItem.classList.contains('open');
-        newAccordionItem.classList.toggle('open');
-        newContent.style.maxHeight = isOpen ? null : newContent.scrollHeight + "px";
-    });
-
-    saveButton.addEventListener('click', () => {
-        const titleInput = newContent.querySelector('input[placeholder="Enter event title..."]').value.trim();
-        const dateInput = newContent.querySelector('input[placeholder="Enter day/date..."]').value.trim();
-        const timeInput = newContent.querySelector('input[placeholder="Enter time..."]').value.trim();
-
-        if (!titleInput || !dateInput || !timeInput) {
-            alert('Please fill in all the fields before saving.');
-            return;
-        }
-
-        newTitle.innerText = `${titleInput} - ${dateInput} - ${timeInput}`;
-        newTitle.appendChild(deleteIcon);
-        newContent.querySelectorAll('input').forEach(input => input.disabled = true);
-        saveButton.style.display = 'none';
-        editButton.style.display = 'inline-block';
-    });
-
-    editButton.addEventListener('click', () => {
-        newContent.querySelectorAll('input').forEach(input => input.disabled = false);
-        saveButton.style.display = 'inline-block';
-        editButton.style.display = 'none';
-    });
+    // Function to delete a reminder
+    function deleteReminder(reminderId, accordionItem) {
+        fetch(`/reminders/${reminderId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error deleting reminder: ${response.statusText} (${response.status})`);
+                }
+                accordionItem.remove();
+                if (accordionContainer.children.length === 0) {
+                    accordionContainer.innerHTML = '<p class="empty-message">No reminders yet.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting reminder:', error);
+                alert('Failed to delete reminder.');
+            });
+    }
 });
