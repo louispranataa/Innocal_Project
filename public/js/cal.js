@@ -207,34 +207,28 @@ function getActiveDay(date) {
 }
 
 function updateEvents(date) {
-  let events = "";
-  eventsArr.forEach((event) => {
-    if (
-      date === event.day &&
-      month + 1 === event.month &&
-      year === event.year
-    ) {
-      event.events.forEach((event) => {
-        events += `<div class="event">
+  fetch(`/reminders?day=${date}&month=${month + 1}&year=${year}`)
+    .then(response => response.json())
+    .then(events => {
+      let eventsHTML = "";
+      events.forEach((event) => {
+        eventsHTML += `
+          <div class="event">
             <div class="title">
               <i class="fas fa-circle"></i>
               <h3 class="event-title">${event.title}</h3>
             </div>
-            <div class="event-description">
-              <p>${event.description}</p>
-            </div>
-            <div class="event-time">
-              <span>${event.time}</span>
-            </div>
-        </div>`;
+            <div class="time">${event.time}</div>
+          </div>
+        `;
       });
-    }
-  });
-  if (events === "") {
-    events = `<div class="no-event"><h3>No Events</h3></div>`;
-  }
-  eventsContainer.innerHTML = events;
-  saveEvents();
+
+      if (eventsHTML === "") {
+        eventsHTML = `<div class="no-event"><h3>No Events</h3></div>`;
+      }
+      eventsContainer.innerHTML = eventsHTML;
+    })
+    .catch(error => console.error('Error fetching events:', error));
 }
 
 
@@ -294,155 +288,121 @@ addEventTo.addEventListener("input", (e) => {
 });
 
 // Updated validation for adding events
+// Updated validation for adding events
 addEventSubmit.addEventListener("click", () => {
   const eventTitle = addEventTitle.value.trim();
   const eventDescription = addEventDescription.value.trim();
   const eventTimeTo = addEventTo.value.trim();
 
-  // Clear previous validation errors
-  [addEventTitle, addEventDescription, addEventTo].forEach((input) => {
-    input.style.border = ""; // Reset border color
-  });
-
-  let isValid = true;
-
-  // Check if event title is empty
-  if (eventTitle === "") {
-    alert("Event title is required.");
-    addEventTitle.style.border = "2px solid red";
-    isValid = false;
-  }
-
-  // Check if event description is empty
-  if (eventDescription === "") {
-    alert("Event description is required.");
-    addEventDescription.style.border = "2px solid red";
-    isValid = false;
-  }
-
-  // Check if event time is empty or invalid
-  const timeToArr = eventTimeTo.split(":");
-  if (
-    eventTimeTo === "" ||
-    timeToArr.length !== 2 ||
-    isNaN(timeToArr[0]) ||
-    isNaN(timeToArr[1]) ||
-    Number(timeToArr[0]) > 23 ||
-    Number(timeToArr[1]) > 59
-  ) {
-    alert("Valid event time (HH:MM) is required.");
-    addEventTo.style.border = "2px solid red";
-    isValid = false;
-  }
-
-  // Stop execution if validation fails
-  if (!isValid) return;
-
-  // Proceed to add the event
-  let eventExist = false;
-  eventsArr.forEach((event) => {
-    if (
-      event.day === activeDay &&
-      event.month === month + 1 &&
-      event.year === year
-    ) {
-      event.events.forEach((event) => {
-        if (event.title === eventTitle) {
-          eventExist = true;
-        }
-      });
-    }
-  });
-
-  if (eventExist) {
-    alert("Event with this title already exists.");
+  // Check if all fields are filled
+  if (!eventTitle || !eventDescription || !eventTimeTo) {
+    alert("Please fill all fields!");
     return;
   }
 
-  const newEvent = {
-    title: eventTitle,
-    description: eventDescription,
-    time: eventTimeTo,
-  };
-
-  let eventAdded = false;
-  if (eventsArr.length > 0) {
-    eventsArr.forEach((item) => {
-      if (
-        item.day === activeDay &&
-        item.month === month + 1 &&
-        item.year === year
-      ) {
-        item.events.push(newEvent);
-        eventAdded = true;
-      }
-    });
-  }
-
-  if (!eventAdded) {
-    eventsArr.push({
+  // Send a POST request to the backend to add the event
+  fetch('/reminders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      title: eventTitle,
+      description: eventDescription,
+      time: eventTimeTo,
       day: activeDay,
       month: month + 1,
       year: year,
-      events: [newEvent],
+    }),
+  })
+    .then(response => response.json())
+    .then(() => {
+      // Clear input fields after successful addition
+      addEventTitle.value = "";
+      addEventDescription.value = "";
+      addEventTo.value = "";
+
+      // Refresh the events list for the active day
+      updateEvents(activeDay);
+    })
+    .catch(error => {
+      console.error('Error adding reminder:', error);
+      alert('Failed to add event.');
     });
-  }
-
-  console.log(eventsArr);
-  addEventWrapper.classList.remove("active");
-  addEventTitle.value = "";
-  addEventDescription.value = ""; // Clear description input
-  addEventTo.value = "";
-  updateEvents(activeDay);
-
-  // Add "event" class to active day if not already present
-  const activeDayEl = document.querySelector(".day.active");
-  if (!activeDayEl.classList.contains("event")) {
-    activeDayEl.classList.add("event");
-  }
 });
 
+
+// Handle event deletion
 // Handle event deletion
 eventsContainer.addEventListener("click", (e) => {
+  // Check if the clicked element is an event
   if (e.target.classList.contains("event")) {
     if (confirm("Are you sure you want to delete this event?")) {
-      const eventTitle = e.target.children[0].children[1].innerHTML;
-      eventsArr.forEach((event) => {
-        if (
-          event.day === activeDay &&
-          event.month === month + 1 &&
-          event.year === year
-        ) {
-          event.events.forEach((item, index) => {
-            if (item.title === eventTitle) {
-              event.events.splice(index, 1);
-            }
-          });
-          // If no events left in a day then remove that day from eventsArr
-          if (event.events.length === 0) {
-            eventsArr.splice(eventsArr.indexOf(event), 1);
-            // Remove event class from day
-            const activeDayEl = document.querySelector(".day.active");
-            if (activeDayEl.classList.contains("event")) {
-              activeDayEl.classList.remove("event");
-            }
-          }
-        }
+      // Get event title, description, and time
+      const eventTitle = e.target.querySelector(".event-title").innerHTML;
+      const eventDescription = e.target.querySelector(".event-description").innerHTML;
+      const eventTime = e.target.querySelector(".event-time").innerHTML;
+
+      console.log('Sending DELETE request with data:', {
+        title: eventTitle,
+        description: eventDescription,
+        time: eventTime,
+        day: activeDay,
+        month: month + 1,
+        year: year
       });
-      updateEvents(activeDay);
+
+      // Send DELETE request to the server
+      fetch(`/reminders`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: eventTitle,
+          description: eventDescription,
+          time: eventTime,
+          day: activeDay,
+          month: month + 1,
+          year: year,
+        }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Server response:', data);
+          if (data.message === 'Event deleted successfully') {
+            // Refresh the event list after deletion
+            updateEvents(activeDay);
+          }
+        })
+        .catch(error => {
+          console.error('Error deleting event:', error);
+          alert('Failed to delete event.');
+        });
     }
   }
 });
 
-// Save events to localStorage
-function saveEvents() {
-  localStorage.setItem("events", JSON.stringify(eventsArr));
-}
 
 // Load events from localStorage
 function getEvents() {
-  if (localStorage.getItem("events") === null) {
-    return;
-  }
-  eventsArr.push(...JSON.parse(localStorage.getItem("events")));
+  fetch(`/reminders?day=${activeDay}&month=${month + 1}&year=${year}`)
+    .then(response => response.json())
+    .then(reminders => {
+      eventsArr.length = 0; // Clear the previous reminders
+      reminders.forEach(reminder => {
+        eventsArr.push({
+          day: activeDay,
+          title: reminder.title,
+          description: reminder.description,
+          time: reminder.time,
+        });
+      });
+      initCalendar(); // Reinitialize the calendar to reflect reminders
+    })
+    .catch(error => {
+      console.error('Error fetching reminders:', error);
+    });
 }
+
+getEvents();
