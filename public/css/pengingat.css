@@ -1,196 +1,81 @@
-.desktop {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  background: rgba(10, 14, 23, 1);
-  background-attachment: fixed;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const accordionContainer = document.getElementById('accordion-container');
 
-.navbar {
-  position: absolute;
-  top: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100vw;
-  padding: 10px 20px;
-  background-color: white;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
+    // Fetch reminders from the server
+    fetch('/reminders')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error fetching reminders: ${response.statusText} (${response.status})`);
+            }
+            return response.json();
+        })
+        .then(reminders => {
+            // If no reminders, show empty message
+            if (reminders.length === 0) {
+                accordionContainer.innerHTML = '<p class="empty-message">No reminders yet.</p>';
+                return;
+            }
 
-.logo {
-  width: 150px;
-}
+            // Populate reminders in the accordion
+            reminders.forEach(reminder => {
+                const accordionItem = document.createElement('div');
+                accordionItem.classList.add('accordion-item');
 
-.hamburger-menu {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-}
+                const title = document.createElement('button');
+                title.classList.add('accordion-title');
+                title.innerText = `${reminder.title} - ${reminder.reminder_date} - ${reminder.time}`;
 
-.hamburger-menu span {
-  background-color: #023047;
-  height: 3px;
-  width: 25px;
-  margin: 3px 0;
-  transition: 0.3s;
-}
+                const content = document.createElement('div');
+                content.classList.add('accordion-content');
+                content.innerHTML = `
+                    <p><strong>Title:</strong> ${reminder.title}</p>
+                    <p><strong>Date:</strong> ${reminder.reminder_date}</p>
+                    <p><strong>Time:</strong> ${reminder.time}</p>
+                    <button class="delete-button" data-id="${reminder.id}">Delete</button>
+                `;
 
-.nav-links {
-  display: flex;
-}
+                accordionItem.appendChild(title);
+                accordionItem.appendChild(content);
+                accordionContainer.appendChild(accordionItem);
 
-.nav-links a {
-  color: #023047;
-  text-decoration: none;
-  font-weight: bold;
-  margin: 0 15px;
-  transition: color 0.3s;
-}
+                // Expand/Collapse logic
+                title.addEventListener('click', () => {
+                    const isOpen = accordionItem.classList.contains('open');
+                    accordionItem.classList.toggle('open');
+                    content.style.maxHeight = isOpen ? null : content.scrollHeight + "px";
+                });
 
-.nav-links a:hover {
-  color: #219ebc;
-}
+                // Add delete functionality
+                const deleteButton = content.querySelector('.delete-button');
+                deleteButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const reminderId = deleteButton.getAttribute('data-id');
+                    deleteReminder(reminderId, accordionItem);
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            accordionContainer.innerHTML = `<p class="empty-message">${error.message}</p>`;
+        });
 
-@media (max-width: 500px) {
-  .hamburger-menu {
-    display: flex;
-  }
-
-  .nav-links {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    background-color: white;
-    width: 150px;
-    border-radius: 5px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .nav-links a {
-    margin: 10px 0;
-    padding: 10px;
-    text-align: center;
-  }
-
-  .nav-links.show {
-    display: flex;
-  }
-}
-
-.main-title {
-  font-size: 40px;
-  color: #ffffff;
-  margin-top: 20px;
-  margin: 80px 0 20px;
-}
-
-.accordion {
-  width: 100%;
-  max-width: 1000px;
-}
-
-.accordion-item {
-  background-color: #023047;
-  margin: 10px 0;
-  border-radius: 15px;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-}
-
-.accordion-content {
-  padding: 20px;
-  display: block;
-  color: #ffffff;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
-}
-
-.accordion-title {
-  background-color: transparent;
-  border: none;
-  outline: none;
-  width: 100%;
-  padding: 20px;
-  font-size: 24px;
-  text-align: left;
-  cursor: pointer;
-  color: #ffffff;
-  font-weight: bold;
-  position: relative;
-}
-
-.accordion-title .delete-icon {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #ffffff;
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.accordion-item.open .accordion-content {
-  max-height: 500px;
-}
-
-.accordion-content {
-  padding: 20px;
-  display: none;
-  color: #ffffff;
-}
-
-.accordion-content label {
-  display: block;
-  margin: 10px 0;
-}
-
-.accordion-content input[type="text"] {
-  width: calc(100% - 10px);
-  padding: 8px;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-}
-.accordion-item.open .accordion-content {
-  display: block;
-}
-
-.save-button, .edit-button, .delete-button {
-  margin: 10px 5px 0 0;
-  padding: 8px 12px;
-  font-size: 14px;
-  color: white;
-  background-color: #3a3e40;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.save-button:hover, .edit-button:hover, .delete-button:hover {
-  background-color: #219ebc;
-}
-
-.add-accordion-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 18px;
-  color: white;
-  background-color: #023047;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.add-accordion-button:hover {
-  background-color: #219ebc;
-}
+    // Function to delete a reminder
+    function deleteReminder(reminderId, accordionItem) {
+        fetch(`/reminders/${reminderId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error deleting reminder: ${response.statusText} (${response.status})`);
+                }
+                accordionItem.remove();
+                if (accordionContainer.children.length === 0) {
+                    accordionContainer.innerHTML = '<p class="empty-message">No reminders yet.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting reminder:', error);
+                alert('Failed to delete reminder.');
+            });
+    }
+});
