@@ -1,111 +1,81 @@
-const hamburgerMenu = document.getElementById('hamburger-menu');
-const navLinks = document.getElementById('nav-links');
-
-// Navbar toggle
-hamburgerMenu.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-    hamburgerMenu.classList.toggle('active');
-});
-
-// Add note functionality
-document.getElementById('add-accordion-button').addEventListener('click', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const accordionContainer = document.getElementById('accordion-container');
-    const emptyMessage = accordionContainer.querySelector('.empty-message');
-    if (emptyMessage) emptyMessage.remove();
 
-    const newAccordionItem = document.createElement('div');
-    newAccordionItem.classList.add('accordion-item');
+    // Fetch reminders from the server
+    fetch('/reminders')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error fetching reminders: ${response.statusText} (${response.status})`);
+            }
+            return response.json();
+        })
+        .then(reminders => {
+            // If no reminders, show empty message
+            if (reminders.length === 0) {
+                accordionContainer.innerHTML = '<p class="empty-message">No reminders yet.</p>';
+                return;
+            }
 
-    const newTitle = document.createElement('button');
-    newTitle.classList.add('accordion-title');
-    newTitle.innerText = "New Note";
+            // Populate reminders in the accordion
+            reminders.forEach(reminder => {
+                const accordionItem = document.createElement('div');
+                accordionItem.classList.add('accordion-item');
 
-    const deleteIcon = document.createElement('button');
-    deleteIcon.classList.add('delete-icon');
-    deleteIcon.innerHTML = '✖';
-    deleteIcon.addEventListener('click', (event) => {
-        event.stopPropagation();
-        accordionContainer.removeChild(newAccordionItem);
-    });
+                const title = document.createElement('button');
+                title.classList.add('accordion-title');
+                title.innerText = `${reminder.title} - ${reminder.description} - ${reminder.time}`;
 
-    newTitle.appendChild(deleteIcon);
-
-    const newContent = document.createElement('div');
-    newContent.classList.add('accordion-content');
-    newContent.innerHTML = `
-        <input type="text" placeholder="Enter note title..." class="note-title-input" style="width: 100%; margin-bottom: 10px;">
-        <textarea placeholder="Enter note details..." class="note-details-input" style="width: 100%; height: 100px;"></textarea>
-        <button class="save-button">Save</button>
-        <button class="edit-button" style="display: none;">Edit</button>
-    `;
-
-    newAccordionItem.appendChild(newTitle);
-    newAccordionItem.appendChild(newContent);
-    accordionContainer.appendChild(newAccordionItem);
-
-    const saveButton = newContent.querySelector('.save-button');
-    const editButton = newContent.querySelector('.edit-button');
-    const titleInput = newContent.querySelector('.note-title-input');
-    const detailsInput = newContent.querySelector('.note-details-input');
-
-    // Toggle content visibility
-    newTitle.addEventListener('click', () => {
-        newAccordionItem.classList.toggle('open');
-    });
-
-    // Save functionality
-    saveButton.addEventListener('click', () => {
-        const titleValue = titleInput.value.trim();
-        const detailsValue = detailsInput.value.trim();
-
-        if (!titleValue || !detailsValue) {
-            alert('Please fill in both title and details before saving.');
-            return;
-        }
-
-        // Update title
-        newTitle.innerText = titleValue;
-        newTitle.appendChild(deleteIcon);
-
-        // Display saved note details
-        newContent.innerHTML = `
-            <p style="color: white; font-size: 16px; margin: 5px 0;"><strong>${titleValue}</strong></p>
-            <p style="color: white; font-size: 14px; margin: 5px 0;">${detailsValue}</p>
-            <button class="edit-button">Edit</button>
-        `;
-
-        const editButtonAfterSave = newContent.querySelector('.edit-button');
-        // Edit functionality
-        editButtonAfterSave.addEventListener('click', () => {
-            newContent.innerHTML = `
-                <input type="text" value="${titleValue}" class="note-title-input" style="width: 100%; margin-bottom: 10px;">
-                <textarea class="note-details-input" style="width: 100%; height: 100px;">${detailsValue}</textarea>
-                <button class="save-button">Save</button>
-            `;
-            const saveButtonAfterEdit = newContent.querySelector('.save-button');
-            saveButtonAfterEdit.addEventListener('click', () => {
-                const newTitleValue = newContent.querySelector('.note-title-input').value.trim();
-                const newDetailsValue = newContent.querySelector('.note-details-input').value.trim();
-
-                if (!newTitleValue || !newDetailsValue) {
-                    alert('Please fill in both title and details before saving.');
-                    return;
-                }
-
-                // Update title and details
-                newTitle.innerText = newTitleValue;
-                newTitle.appendChild(deleteIcon);
-                newContent.innerHTML = `
-                    <p style="color: white; font-size: 16px; margin: 5px 0;"><strong>${newTitleValue}</strong></p>
-                    <p style="color: white; font-size: 14px; margin: 5px 0;">${newDetailsValue}</p>
-                    <button class="edit-button">Edit</button>
+                const content = document.createElement('div');
+                content.classList.add('accordion-content');
+                content.innerHTML = `
+                    <p><strong>Title:</strong> ${reminder.title}</p>
+                    <p><strong>Date:</strong> ${reminder.description}</p>
+                    <p><strong>Time:</strong> ${reminder.time}</p>
+                    <button class="delete-button" data-id="${reminder.id}">Delete</button>
                 `;
 
-                const editButtonAgain = newContent.querySelector('.edit-button');
-                editButtonAgain.addEventListener('click', () => {
-                    editButtonAfterSave.click();
+                accordionItem.appendChild(title);
+                accordionItem.appendChild(content);
+                accordionContainer.appendChild(accordionItem);
+
+                // Expand/Collapse logic
+                title.addEventListener('click', () => {
+                    const isOpen = accordionItem.classList.contains('open');
+                    accordionItem.classList.toggle('open');
+                    content.style.maxHeight = isOpen ? null : content.scrollHeight + "px";
+                });
+
+                // Add delete functionality
+                const deleteButton = content.querySelector('.delete-button');
+                deleteButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const reminderId = deleteButton.getAttribute('data-id');
+                    deleteReminder(reminderId, accordionItem);
                 });
             });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            accordionContainer.innerHTML = `<p class="empty-message">${error.message}</p>`;
         });
-    });
+
+    // Function to delete a reminder
+    function deleteReminder(reminderId, accordionItem) {
+        fetch(`/reminders/${reminderId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error deleting reminder: ${response.statusText} (${response.status})`);
+                }
+                accordionItem.remove();
+                if (accordionContainer.children.length === 0) {
+                    accordionContainer.innerHTML = '<p class="empty-message">No reminders yet.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting reminder:', error);
+                alert('Failed to delete reminder.');
+            });
+    }
 });
