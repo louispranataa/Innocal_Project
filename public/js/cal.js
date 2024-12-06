@@ -18,12 +18,12 @@ const calendar = document.querySelector(".calendar"),
   eventDate = document.querySelector(".event-date"),
   eventsContainer = document.querySelector(".events"),
   addEventBtn = document.querySelector(".add-event"),
-  addEventWrapper = document.querySelector(".add-event-wrapper "),
-  addEventCloseBtn = document.querySelector(".close "),
-  addEventTitle = document.querySelector(".event-name "),
-  addEventFrom = document.querySelector(".event-time-from "),
-  addEventTo = document.querySelector(".event-time-to "),
-  addEventSubmit = document.querySelector(".add-event-btn ");
+  addEventWrapper = document.querySelector(".add-event-wrapper"),
+  addEventCloseBtn = document.querySelector(".close"),
+  addEventTitle = document.querySelector(".event-name"),
+  addEventDescription = document.querySelector(".event-description"),
+  addEventTo = document.querySelector(".event-time-to"),
+  addEventSubmit = document.querySelector(".add-event-btn");
 
 let today = new Date();
 let activeDay;
@@ -31,18 +31,8 @@ let month = today.getMonth();
 let year = today.getFullYear();
 
 const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
 ];
 
 const eventsArr = [];
@@ -94,7 +84,7 @@ function initCalendar() {
       if (event) {
         days += `<div class="day event">${i}</div>`;
       } else {
-        days += `<div class="day ">${i}</div>`;
+        days += `<div class="day">${i}</div>`;
       }
     }
   }
@@ -129,7 +119,6 @@ next.addEventListener("click", nextMonth);
 
 initCalendar();
 
-//function to add active on day
 function addListner() {
   const days = document.querySelectorAll(".day");
   days.forEach((day) => {
@@ -137,14 +126,12 @@ function addListner() {
       getActiveDay(e.target.innerHTML);
       updateEvents(Number(e.target.innerHTML));
       activeDay = Number(e.target.innerHTML);
-      //remove active
       days.forEach((day) => {
         day.classList.remove("active");
       });
       if (e.target.classList.contains("prev-date")) {
         prevMonth();
         setTimeout(() => {
-          //add active where no prev-date or next-date
           const days = document.querySelectorAll(".day");
           days.forEach((day) => {
             if (
@@ -200,7 +187,6 @@ dateInput.addEventListener("input", (e) => {
 gotoBtn.addEventListener("click", gotoDate);
 
 function gotoDate() {
-  console.log("here");
   const dateArr = dateInput.value.split("/");
   if (dateArr.length === 2) {
     if (dateArr[0] > 0 && dateArr[0] < 13 && dateArr[1].length === 4) {
@@ -234,21 +220,23 @@ function updateEvents(date) {
               <i class="fas fa-circle"></i>
               <h3 class="event-title">${event.title}</h3>
             </div>
+            <div class="event-description">
+              <p>${event.description}</p>
+            </div>
             <div class="event-time">
-              <span class="event-time">${event.time}</span>
+              <span>${event.time}</span>
             </div>
         </div>`;
       });
     }
   });
   if (events === "") {
-    events = `<div class="no-event">
-            <h3>No Events</h3>
-        </div>`;
+    events = `<div class="no-event"><h3>No Events</h3></div>`;
   }
   eventsContainer.innerHTML = events;
   saveEvents();
 }
+
 
 addEventBtn.addEventListener("click", () => {
   addEventWrapper.classList.toggle("active");
@@ -286,13 +274,12 @@ function defineProperty() {
 
 defineProperty();
 
-addEventFrom.addEventListener("input", (e) => {
-  addEventFrom.value = addEventFrom.value.replace(/[^0-9:]/g, "");
-  if (addEventFrom.value.length === 2) {
-    addEventFrom.value += ":";
-  }
-  if (addEventFrom.value.length > 5) {
-    addEventFrom.value = addEventFrom.value.slice(0, 5);
+addEventDescription.addEventListener("input", (e) => {
+  addEventDescription.value = addEventDescription.value.replace(/[^a-zA-Z0-9\s.,!?'-]/g, "");
+
+  const maxLength = 200;
+  if (addEventDescription.value.length > maxLength) {
+    addEventDescription.value = addEventDescription.value.slice(0, maxLength);
   }
 });
 
@@ -306,32 +293,52 @@ addEventTo.addEventListener("input", (e) => {
   }
 });
 
+// Updated validation for adding events
 addEventSubmit.addEventListener("click", () => {
-  const eventTitle = addEventTitle.value;
-  const eventTimeFrom = addEventFrom.value;
-  const eventTimeTo = addEventTo.value;
-  if (eventTitle === "" || eventTimeFrom === "" || eventTimeTo === "") {
-    alert("Please fill all the fields");
-    return;
+  const eventTitle = addEventTitle.value.trim();
+  const eventDescription = addEventDescription.value.trim();
+  const eventTimeTo = addEventTo.value.trim();
+
+  // Clear previous validation errors
+  [addEventTitle, addEventDescription, addEventTo].forEach((input) => {
+    input.style.border = ""; // Reset border color
+  });
+
+  let isValid = true;
+
+  // Check if event title is empty
+  if (eventTitle === "") {
+    alert("Event title is required.");
+    addEventTitle.style.border = "2px solid red";
+    isValid = false;
   }
 
-  const timeFromArr = eventTimeFrom.split(":");
+  // Check if event description is empty
+  if (eventDescription === "") {
+    alert("Event description is required.");
+    addEventDescription.style.border = "2px solid red";
+    isValid = false;
+  }
+
+  // Check if event time is empty or invalid
   const timeToArr = eventTimeTo.split(":");
   if (
-    timeFromArr.length !== 2 ||
+    eventTimeTo === "" ||
     timeToArr.length !== 2 ||
-    timeFromArr[0] > 23 ||
-    timeFromArr[1] > 59 ||
-    timeToArr[0] > 23 ||
-    timeToArr[1] > 59
+    isNaN(timeToArr[0]) ||
+    isNaN(timeToArr[1]) ||
+    Number(timeToArr[0]) > 23 ||
+    Number(timeToArr[1]) > 59
   ) {
-    alert("Invalid Time Format");
-    return;
+    alert("Valid event time (HH:MM) is required.");
+    addEventTo.style.border = "2px solid red";
+    isValid = false;
   }
 
-  const timeFrom = convertTime(eventTimeFrom);
-  const timeTo = convertTime(eventTimeTo);
+  // Stop execution if validation fails
+  if (!isValid) return;
 
+  // Proceed to add the event
   let eventExist = false;
   eventsArr.forEach((event) => {
     if (
@@ -346,16 +353,18 @@ addEventSubmit.addEventListener("click", () => {
       });
     }
   });
+
   if (eventExist) {
-    alert("Event already added");
+    alert("Event with this title already exists.");
     return;
   }
+
   const newEvent = {
     title: eventTitle,
-    time: timeFrom + " - " + timeTo,
+    description: eventDescription,
+    time: eventTimeTo,
   };
-  console.log(newEvent);
-  console.log(activeDay);
+
   let eventAdded = false;
   if (eventsArr.length > 0) {
     eventsArr.forEach((item) => {
@@ -382,16 +391,18 @@ addEventSubmit.addEventListener("click", () => {
   console.log(eventsArr);
   addEventWrapper.classList.remove("active");
   addEventTitle.value = "";
-  addEventFrom.value = "";
+  addEventDescription.value = ""; // Clear description input
   addEventTo.value = "";
   updateEvents(activeDay);
-  //select active day and add event class if not added
+
+  // Add "event" class to active day if not already present
   const activeDayEl = document.querySelector(".day.active");
   if (!activeDayEl.classList.contains("event")) {
     activeDayEl.classList.add("event");
   }
 });
 
+// Handle event deletion
 eventsContainer.addEventListener("click", (e) => {
   if (e.target.classList.contains("event")) {
     if (confirm("Are you sure you want to delete this event?")) {
@@ -407,10 +418,10 @@ eventsContainer.addEventListener("click", (e) => {
               event.events.splice(index, 1);
             }
           });
-          //if no events left in a day then remove that day from eventsArr
+          // If no events left in a day then remove that day from eventsArr
           if (event.events.length === 0) {
             eventsArr.splice(eventsArr.indexOf(event), 1);
-            //remove event class from day
+            // Remove event class from day
             const activeDayEl = document.querySelector(".day.active");
             if (activeDayEl.classList.contains("event")) {
               activeDayEl.classList.remove("event");
@@ -423,23 +434,15 @@ eventsContainer.addEventListener("click", (e) => {
   }
 });
 
+// Save events to localStorage
 function saveEvents() {
   localStorage.setItem("events", JSON.stringify(eventsArr));
 }
 
+// Load events from localStorage
 function getEvents() {
   if (localStorage.getItem("events") === null) {
     return;
   }
   eventsArr.push(...JSON.parse(localStorage.getItem("events")));
-}
-
-function convertTime(time) {
-  let timeArr = time.split(":");
-  let timeHour = timeArr[0];
-  let timeMin = timeArr[1];
-  let timeFormat = timeHour >= 12 ? "PM" : "AM";
-  timeHour = timeHour % 12 || 12;
-  time = timeHour + ":" + timeMin + " " + timeFormat;
-  return time;
 }
