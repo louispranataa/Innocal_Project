@@ -167,7 +167,7 @@
   padding: 8px 12px;
   font-size: 14px;
   color: white;
-  background-color: #3a3e40;
+  background-color: #ff0000;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -175,7 +175,7 @@
 }
 
 .save-button:hover, .edit-button:hover, .delete-button:hover {
-  background-color: #219ebc;
+  background-color: #810404;
 }
 
 .add-accordion-button {
