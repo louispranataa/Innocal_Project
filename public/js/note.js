@@ -23,14 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const title = document.createElement('button');
                 title.classList.add('accordion-title');
-                title.innerText = `${reminder.title} - ${reminder.description} - ${reminder.time}`;
+                title.innerText = `${reminder.title}`;
 
                 const content = document.createElement('div');
                 content.classList.add('accordion-content');
                 content.innerHTML = `
-                    <p><strong>Title:</strong> ${reminder.title}</p>
-                    <p><strong>Date:</strong> ${reminder.description}</p>
-                    <p><strong>Time:</strong> ${reminder.time}</p>
+                    <p><strong>Note:</strong> ${reminder.description}</p>
                     <button class="delete-button" data-id="${reminder.id}">Delete</button>
                 `;
 
