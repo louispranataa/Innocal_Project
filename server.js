@@ -336,3 +336,32 @@ app.delete('/reminders', authenticate, async (req, res) => {
         res.status(500).json({ error: 'Failed to delete event' });
     }
 });
+
+app.put('/reminders/:id', async (req, res) => {
+    const { id } = req.params; // Reminder ID from the URL
+    const { title, time } = req.body; // Updated title and time from the request body
+
+    if (!title || !time) {
+        return res.status(400).json({ error: 'Title and time are required.' });
+    }
+
+    try {
+        // Update the reminder in the database
+        const result = await pool.query(
+            'UPDATE reminders SET title = $1, time = $2 WHERE id = $3 RETURNING *',
+            [title, time, id]
+        );
+
+        // Check if the reminder exists
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Reminder not found.' });
+        }
+
+        // Return the updated reminder
+        const updatedReminder = result.rows[0];
+        res.status(200).json({ message: 'Reminder updated successfully.', reminder: updatedReminder });
+    } catch (err) {
+        console.error('Error updating reminder:', err);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+});
